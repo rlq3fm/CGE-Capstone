@@ -1,0 +1,23 @@
+--- Job run.gms Start 10/18/22 11:59:32 40.4.0 d540b52e WEX-WEI x86 64bit/MS Windows
+--- Applying:
+    C:\GAMS\40\gmsprmNT.txt
+--- GAMS Parameters defined
+    Input "C:\Users\Student\OneDrive - University of Virginia\Documents\Capstone\CHEER\CHEER-Clean\run.gms"
+    PageSize 0
+    ScrDir "C:\Users\Student\OneDrive - University of Virginia\Documents\Capstone\CHEER\CHEER-Clean\225a\"
+    SysDir C:\GAMS\40\
+    LogOption 3
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    LstTitleLeftAligned 1
+****
+**** No license specified and no gamslice.txt found in standard locations.
+****
+*** Status: Terminated due to a licensing error
+***         Request a demo license at www.gams.com/download.
+***         If you have a GAMS license already, you can install it via
+***         the GAMS Studio dialog under "Help | GAMS Licensing" or by
+***         manually saving it as gamslice.txt in a standard location.
+***         Inspect listing file for more information.
+--- Job run.gms Stop 10/18/22 11:59:32 elapsed 0:00:00.008
