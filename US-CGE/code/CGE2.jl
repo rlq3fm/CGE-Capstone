@@ -5,12 +5,12 @@ using JuMP, Complementarity, DataFrames
 sec = ["agri", "manu", "serv"]
 sc = [1, 2, 3]
 sam = [
-    260     320     150     missing missing 635
-    345     390     390     missing missing 600
-    400     365     320     missing missing 385
-    200     250     400     missing missing missing
-    160     400     210     missing missing missing
-    missing missing missing 850     770     missing 
+    19      122     18      missing missing 53
+    51      1658    1195    missing missing 1114
+    71      1114    3997    missing missing 6387
+    42      1132    5645    missing missing missing
+    45      513     2352    missing missing missing
+    missing missing missing 6819    2910   missing 
 ]
 samList = ["agri", "manu", "serv", "lab", "cap", "hh"]
 
