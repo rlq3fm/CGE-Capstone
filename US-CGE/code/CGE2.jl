@@ -5,9 +5,9 @@ using JuMP, Complementarity, DataFrames
 sec = ["agri", "manu", "serv"]
 sc = [1, 2, 3]
 sam = [
-    19      122     18      missing missing 53
-    51      1658    1195    missing missing 1114
-    71      1114    3997    missing missing 6387
+    19      122     18      missing missing 69
+    51      1658    1195    missing missing 1635
+    71      1114    3997    missing missing 8025
     42      1132    5645    missing missing missing
     45      513     2352    missing missing missing
     missing missing missing 6819    2910   missing 
@@ -106,6 +106,7 @@ function solve_cge()
 
     # Model Solver
     status = solveMCP(m; convergence_tolerance=1e-8, output="yes", ITERATION_LIMIT=10000)
+    @show result_value.(y)
     @show result_value.(walras)
 end
 

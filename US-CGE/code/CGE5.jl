@@ -1,17 +1,19 @@
 #  A Simple CGE Model with government
-using JuMP, Complementarity, DataFrames
+using JuMP, Complementarity, DataFrames, CSV
 
 sec = ["agri", "manu", "serv"]
 sc = [1, 2, 3]
+
 sam = [
-    260     320     150     missing missing 630     10
-    345     390     390     missing missing 590     15
-    400     365     320     missing missing 385     5
-    200     250     400     missing missing missing missing
-    160     400     210     missing missing missing missing
-    missing missing missing 850     770     missing 10
-    5       5       5       missing missing 25      missing                             
-]
+    19          122         18          missing     missing     69        10
+    51          1658        1195        missing     missing     1635      15
+    71          1114        3997        missing     missing     8025      5
+    42          1132        5645        missing     missing     missing   missing
+    45          513         2352        missing     missing     missing   missing
+    missing     missing     missing     6819        2910        missing   10
+    5           5           5           missing     missing     25        missing
+    ]
+
 samList = ["agri", "manu", "serv", "lab", "cap", "hh"]
 
 # production block
@@ -144,7 +146,7 @@ function solve_cge()
     @mapping(m, eqwl, ls + walras - sum(l[i] for i in sc))
     @complementarity(m, eqwl, walras)
 
-    # @mapping(m, eqgdp, gdp - sum(qh[i] for i in sc))
+     @mapping(m, eqgdp, gdp - sum(qh[i] for i in sc))
     # @complementarity(m, eqgdp, gdp)
 
     # @mapping(m, eqpdgp, pgdp * gdp - sum(p[i] * qh[i] for i in sc))

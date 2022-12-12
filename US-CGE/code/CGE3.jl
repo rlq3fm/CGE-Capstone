@@ -1,18 +1,14 @@
 #  A Simple CGE Model with three sectors and intermediate input, as well as Linear Expenditure System
-using JuMP, Complementarity, DataFrames
+using JuMP, Complementarity, DataFrames, CSV
 
 sec = ["agri", "manu", "serv"]
 sc = [1, 2, 3]
-sam = [
-    260     320     150     missing missing 635
-    345     390     390     missing missing 600
-    400     365     320     missing missing 385
-    200     250     400     missing missing missing
-    160     400     210     missing missing missing
-    missing missing missing 850     770     missing 
-]
+
 samList = ["agri", "manu", "serv", "lab", "cap", "hh"]
 
+samPath = joinpath(@__DIR__, "data", "sam4.csv")
+sam = CSV.read(samPath, DataFrames.DataFrame, header=1)
+sam=Matrix(sam)
 qint0 = sam[sc, sc]
 k0 = sam[length(sc) + 2, sc]
 l0 = sam[length(sc) + 1, sc]
@@ -114,6 +110,7 @@ function solve_cge()
 
     # Model Solver
     status = solveMCP(m; convergence_tolerance=1e-8, output="yes", ITERATION_LIMIT=10000)
+    @show result_value.(y)
     @show result_value.(walras)
 end
 
