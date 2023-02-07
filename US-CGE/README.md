@@ -6,8 +6,14 @@ A tutorial for Julia-based CGE modeling with lots of cases
 #### CGE1: *A simple model with two sectors and no intermediate input*
 
 * **Notes: For the initial solution, the non-linear equations should be balanced**
+* This generic model helps to understand the basic function of CGE models - SAM is not representative of a specific economy, and two sectors are general
+* The solution is reached using an MCP (mixed complementarity formula) model. More documentation at this link: https://github.com/chkwon/Complementarity.jl/blob/master/MCP.md
+* code can be adjusted to show various result values (e.g. labor supply, capital supply, household consumption, etc.)
+* Experimentation can be done by changing parameters such as labor or capital supply and observing how the output changes
 
 #### CGE2: *A Simple CGE Model with three sectors and intermediate input*
+* This model takes in data specific to the US, with a SAM constructed from the GTAPAgg 7. (Tutorial for using GTAP: https://www.youtube.com/watch?v=QDBR0KqNuzE)
+* The three sectors are agriculture, manufacturing, and service 
 
 #### CGE3: *A Simple CGE Model with three sectors and intermediate input, as well as Linear Expenditure System*
 
