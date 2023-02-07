@@ -25,7 +25,7 @@ QH0 = sam[1:2, 5]
 Y0 = WL0 * LS + WK0 * KS
 rho = 0.75
 
-# 校准生产函数参数
+# Calibrate production function parameters
 al = LD0 ./ (LD0 + KD0)
 ak = KD0 ./ (LD0 + KD0)
 alphah = P0 .* QH0 / Y0

@@ -3,18 +3,13 @@ using JuMP, Complementarity, DataFrames, CSV
 
 sec = ["agri", "manu", "serv"]
 sc = [1, 2, 3]
-
-sam = [
-    19          122         18          missing     missing     69        10
-    51          1658        1195        missing     missing     1635      15
-    71          1114        3997        missing     missing     8025      5
-    42          1132        5645        missing     missing     missing   missing
-    45          513         2352        missing     missing     missing   missing
-    missing     missing     missing     6819        2910        missing   10
-    5           5           5           missing     missing     25        missing
-    ]
-
 samList = ["agri", "manu", "serv", "lab", "cap", "hh"]
+
+#sam
+samPath = joinpath(@__DIR__, "data", "sam5.csv")
+sam = CSV.read(samPath, DataFrames.DataFrame, header=1)
+sam=Matrix(sam)
+
 
 # production block
 qint0 = sam[sc, sc]
@@ -146,7 +141,7 @@ function solve_cge()
     @mapping(m, eqwl, ls + walras - sum(l[i] for i in sc))
     @complementarity(m, eqwl, walras)
 
-     @mapping(m, eqgdp, gdp - sum(qh[i] for i in sc))
+    # @mapping(m, eqgdp, gdp - sum(qh[i] for i in sc))
     # @complementarity(m, eqgdp, gdp)
 
     # @mapping(m, eqpdgp, pgdp * gdp - sum(p[i] * qh[i] for i in sc))
