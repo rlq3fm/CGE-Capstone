@@ -2,25 +2,29 @@
 using JuMP, Complementarity, DataFrames, CSV
 PATHSolver.c_api_License_SetString("2830898829&Courtesy&&&USR&45321&5_1_2021&1000&PATH&GEN&31_12_2025&0_0_0&6000&0_0")
 
-samList = ["agri", "manu", "serv", "land", "lab", "cap", "tax", "hh", "govt"]
+samList = ["agri", "manu", "serv", "lab", "cap", "tax", "hh", "govt"]
 sector = ["agri", "manu", "serv"]
 sectors = collect(1:1:length(sector))
 household = ["hh"]
 households = collect(1:1:length(household))
-va = ["land","lab","cap","tax"] #what is this?
+va = ["lab","cap","tax"]
 NumSector = length(sectors)
 NumHouseholds = length(households)
 
-# load sam
-samPath = joinpath(@__DIR__, "data", "sam6.csv")
-sam = CSV.read(samPath, DataFrames.DataFrame, header=1)
-sam=Matrix(sam)
-
+sam = [
+    19      122     18      missing missing missing 95      1
+    51      1658    1195    missing missing missing 1684    2
+    71      1114    3997    missing missing missing 6642    1805
+    42      1132    5645    missing missing missing missing missing
+    76      513     2352    missing missing missing missing missing
+    -5      51      422     1446    244     missing missing missing
+    missing missing missing 5373    2698    missing missing 350
+    missing missing missing missing missing 2158    missing missing                         
+]
 # production
 qint0 = sam[sectors, sectors]
-#land0 = sam[length(sectors + 1), sectors] #do we want this?
-l0 = sam[length(sectors) + 2, sectors] #one more because of land
-k0 = sam[length(sectors) + 3, sectors]
+l0 = sam[length(sectors) + 1, sectors]
+k0 = sam[length(sectors) + 2, sectors]
 ls = sum(l0)
 ks = sum(k0)
 kl0 = k0 + l0
@@ -30,30 +34,30 @@ al = l0 ./ kl0
 int0 = sum(qint0, dims=1)[1, :]
 aqint = qint0 ./ (sum(qint0, dims=1))
 
-prod0 = int0 + kl0 + sam[NumSector + 4, sectors]
-pprod0 = 1 .- sam[NumSector + 4,sectors] ./ prod0
+prod0 = int0 + kl0 + sam[NumSector + 3, sectors]
+pprod0 = 1 .- sam[NumSector + 3,sectors] ./ prod0
 
 aint = int0 ./ prod0 
 akl = kl0 ./ prod0
 
 # income block
-transfr = sam[8, 9]
+transfr = sam[7, 8]
 inch0 = ks + ls + transfr
 taxh = sam[8, 7] / inch0
 
 dinch0 = inch0 * (1 - taxh)
 
-prodtr = sam[NumSector + 4, sectors]./ prod0
+prodtr = sam[NumSector + 3, sectors]./ prod0
 # pprod0 = 1 ./ (1 .+ prodtr)
 
-incg0 = taxh * inch0 + sum(sam[7,sectors])
-consg0 = sam[sectors, 9]
+incg0 = taxh * inch0 + sum(sam[6,sectors])
+consg0 = sam[sectors, 8]
 thetag = consg0 ./ (incg0-transfr)
 
 rho = 0.6
 
 # LES system
-consh0 = sam[sectors, 8]
+consh0 = sam[sectors, 7]
 thetah = consh0 ./ dinch0
 # LESelas = [0.7, 1.0, 1.5]
 # Frisectorsh = -3
@@ -209,6 +213,6 @@ end
 
 solve_cge()
 
-#ls = sum(l0) * 6
-#ks = sum(k0) * 10
-#solve_cge()
+ls = sum(l0) * 6
+ks = sum(k0) * 10
+solve_cge()
