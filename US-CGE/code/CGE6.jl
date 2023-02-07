@@ -17,9 +17,9 @@ sam = [
     71      1114    3997    missing missing missing 6642    1805
     42      1132    5645    missing missing missing missing missing
     76      513     2352    missing missing missing missing missing
-    -5      51      422     1446    244     missing missing missing
-    missing missing missing 5373    2698    missing missing 350
-    missing missing missing missing missing 2158    missing missing                         
+    -4      51      422     missing missing missing missing missing
+    missing missing missing 6819    2941    missing missing 350
+    missing missing missing missing missing 469     1689    missing                         
 ]
 # production
 qint0 = sam[sectors, sectors]
@@ -27,6 +27,8 @@ l0 = sam[length(sectors) + 1, sectors]
 k0 = sam[length(sectors) + 2, sectors]
 ls = sum(l0)
 ks = sum(k0)
+# y0 = ks + ls
+# qh0 = sam[length(sectors), 7]
 kl0 = k0 + l0
 ak = k0 ./ kl0
 al = l0 ./ kl0
@@ -48,7 +50,7 @@ taxh = sam[8, 7] / inch0
 dinch0 = inch0 * (1 - taxh)
 
 prodtr = sam[NumSector + 3, sectors]./ prod0
-# pprod0 = 1 ./ (1 .+ prodtr)
+pprod0 = 1 ./ (1 .+ prodtr)
 
 incg0 = taxh * inch0 + sum(sam[6,sectors])
 consg0 = sam[sectors, 8]
@@ -59,11 +61,11 @@ rho = 0.6
 # LES system
 consh0 = sam[sectors, 7]
 thetah = consh0 ./ dinch0
-# LESelas = [0.7, 1.0, 1.5]
-# Frisectorsh = -3
-# LESbeta = (LESelas .* alphah) ./ sum(LESelas .* alphah)
-# LESbetachk = sum(LESbeta)
-# LESsub = qh0 + LESbeta * (yd0 / Frisectorsh)
+LESelas = [0.7, 1.0, 1.5]
+Frisectorsh = -3
+LESbeta = (LESelas .* alphah) ./ sum(LESelas .* alphah)
+LESbetachk = sum(LESbeta)
+# LESsub = qh0 + LESbeta * (yd0 / Frisectorsh) # qh undefined 
 
 
 elasdir = joinpath(@__DIR__, "data", "Elasticities.csv")
@@ -92,6 +94,7 @@ function solve_cge()
     m = MCPModel()
     pl = 1 # exogenous setting of labor price as one
     @variables m begin
+        # p[i = length(sectors)], (start = 1)
         pprod[i = sectors], (start = pprod0[i]) # production cost of each sector
         pprodt[i = sectors], (start = 1)  # production cost by adding tax
         pk, (start = 1) # price of capital
@@ -103,6 +106,7 @@ function solve_cge()
         k[i = sectors], (start = k0[i]) # capital bundle
         l[i = sectors], (start = l0[i]) # labor bundle
         qint[j = sectors, i = sectors], (start = qint0[j, i]) # segmented intermediate goods
+        # qh[i = sc], (start=qh0[i]) 
         consh[i = sectors], (start=consh0[i]) # consumption of households
         inch, (start=inch0) # income of households 
         dinch, (start=dinch0) # disposable income of households
@@ -110,8 +114,8 @@ function solve_cge()
         expg, (start=incg0) # expenditure of governments
         consg[i = sectors], (start=consg0[i]) # consumption of government
         walras, (start = 0) # walras variable for testing the balance
-        # gdp, (start=y0)
-        # pgdp, (start=1)
+    #    gdp, (start=y0)
+    #    pgdp, (start=1)
     end
     # int + kl = prod
     @mapping(m, eq_int[i in sectors], int[i] * pint[i] ^ sigmap[i] - aint[i] * prod[i] * pprod[i] ^ sigmap[i])
@@ -195,10 +199,10 @@ function solve_cge()
     @mapping(m, eq_pl, ls + walras - sum(l[i] for i in sectors))
     @complementarity(m, eq_pl, walras)
 
-    # @mapping(m, eqgdp, gdp - sum(qh[i] for i in sectors))
-    # @complementarity(m, eqgdp, gdp)
+    # @mapping(m, eqgdp, gdp - sum(qh[i] for i in sectors)) # what is qh?
+    # @complementarity(m, eqgdp, gdp) 
 
-    # @mapping(m, eqpdgp, pgdp * gdp - sum(p[i] * qh[i] for i in sectors))
+    # @mapping(m, eqpdgp, pgdp * gdp - sum(p[i] * qh[i] for i in sectors)) # need qh for this too...
     # @complementarity(m, eqpdgp, pgdp)
 
     # Model Solver
@@ -208,11 +212,16 @@ function solve_cge()
     # @show result_value.(gdp)
     # println("Walras is:")
     @show result_value.(pk)
+    @show result_value.(prod)
+    @show result_value.(consh)
     @show result_value.(walras)
 end
 
 solve_cge()
 
-ls = sum(l0) * 6
-ks = sum(k0) * 10
-solve_cge()
+#####################################################
+# Experiments
+
+#ls = sum(l0) * 6
+#ks = sum(k0) * 10
+#solve_cge()

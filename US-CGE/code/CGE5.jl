@@ -3,13 +3,21 @@ using JuMP, Complementarity, DataFrames, CSV
 
 sec = ["agri", "manu", "serv"]
 sc = [1, 2, 3]
-samList = ["agri", "manu", "serv", "lab", "cap", "hh"]
 
 #sam
-samPath = joinpath(@__DIR__, "data", "sam5.csv")
-sam = CSV.read(samPath, DataFrames.DataFrame, header=1)
-sam=Matrix(sam)
-
+#samPath = joinpath(@__DIR__, "data", "sam5.csv")
+#sam = CSV.read(samPath, DataFrames.DataFrame, header=1)
+#sam=Matrix(sam)
+sam = [
+    19      122     18      missing missing 95      1
+    51      1658    1195    missing missing 1684    2
+    71      1114    3997    missing missing 6642    1805
+    42      1132    5645    missing missing missing missing
+    76      513     2352    missing missing missing missing
+    missing missing missing 6819    2942    missing 350
+    -5      51      422     missing missing 1690    missing                             
+]
+samList = ["agri", "manu", "serv", "lab", "cap", "hh"]
 
 # production block
 qint0 = sam[sc, sc]
@@ -17,6 +25,7 @@ k0 = sam[length(sc) + 2, sc]
 l0 = sam[length(sc) + 1, sc]
 ks = sum(k0)
 ls = sum(l0)
+y0 = ks + ls
 va0 = k0 + l0
 ak = k0 ./ va0
 al = l0 ./ va0
@@ -126,9 +135,9 @@ function solve_cge()
     @complementarity(m, eqqg, qg)
 
     # demand
-    @mapping(m, eqqh[i in sc], p[i] * LESsub[i] + LESbeta[i] * (yd - sum(p[i] * LESsub[i] for i in sc))- p[i] * qh[i])
+    #@mapping(m, eqqh[i in sc], p[i] * LESsub[i] + LESbeta[i] * (yd - sum(p[i] * LESsub[i] for i in sc))- p[i] * qh[i])
     # @mapping(m, eqqh[i in sc], alphah[i] * yd - p[i] * qh[i])
-    @complementarity(m, eqqh, qh)
+   # @complementarity(m, eqqh, qh)
 
     # demand - supply
     @mapping(m, eqq[i in sc], q[i] - (qh[i] + qg[i] + sum(qint[i, j] for j in sc)))
