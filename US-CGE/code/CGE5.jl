@@ -25,7 +25,6 @@ k0 = sam[length(sc) + 2, sc]
 l0 = sam[length(sc) + 1, sc]
 ks = sum(k0)
 ls = sum(l0)
-y0 = ks + ls
 va0 = k0 + l0
 ak = k0 ./ va0
 al = l0 ./ va0
@@ -135,9 +134,9 @@ function solve_cge()
     @complementarity(m, eqqg, qg)
 
     # demand
-    #@mapping(m, eqqh[i in sc], p[i] * LESsub[i] + LESbeta[i] * (yd - sum(p[i] * LESsub[i] for i in sc))- p[i] * qh[i])
+    @mapping(m, eqqh[i in sc], p[i] * LESsub[i] + LESbeta[i] * (yd - sum(p[i] * LESsub[i] for i in sc))- p[i] * qh[i])
     # @mapping(m, eqqh[i in sc], alphah[i] * yd - p[i] * qh[i])
-   # @complementarity(m, eqqh, qh)
+    @complementarity(m, eqqh, qh)
 
     # demand - supply
     @mapping(m, eqq[i in sc], q[i] - (qh[i] + qg[i] + sum(qint[i, j] for j in sc)))
@@ -169,6 +168,6 @@ end
 solve_cge()
 
 
-ls = sum(l0) * 2
-ks = sum(k0) * 3
-solve_cge()
+#ls = sum(l0) * 2
+#ks = sum(k0) * 3
+#solve_cge()

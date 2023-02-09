@@ -73,21 +73,21 @@ elas = CSV.read(elasdir, DataFrames.DataFrame, header=1)
 
 # 3. Calibrate the model
 # 3.0 Elasticities
-sigmap = elas[sectors, "sigmap"]
-sigmakel = elas[sectors, "sigmakel"]
+sigmap = elas[sectors, "sigmap"]            # [0,0,0]
+sigmakel = elas[sectors, "sigmakel"]        # [0.75, 0.75, 0.75]
 # sigmakel = [0.6, 0.6, 0.6]
 # sigmakl = elas[sectors, "sigmakl"]
 sigmakl = [0.6, 0.6, 0.6]
 
-sigmaene = elas[sectors, "sigmaene"]
-sigmafe = elas[sectors, "sigmafe"]
-sigmav = elas[54, "sigmav"]
-sigmam = elas[sectors, "sigmam"]
-sigmae = elas[sectors, "sigmae"]
-sigmaff = elas[sectors, "sigmaff"]
-sigmafes = elas[sectors, "sigmafes"]
-sigmanr = elas[sectors, "sigmanr"]
-eta = elas[sectors, "eta"]
+sigmaene = elas[sectors, "sigmaene"]        # [1.5, 1.5, 1.5]
+sigmafe = elas[sectors, "sigmafe"]          # [1.5, 1.5, 1.5]
+sigmav = elas[54, "sigmav"]                 # 4
+sigmam = elas[sectors, "sigmam"]            # [2,2,2]
+sigmae = elas[sectors, "sigmae"]            # [-2, -2, -2]
+sigmaff = elas[sectors, "sigmaff"]          # [2,2,2]
+sigmafes = elas[sectors, "sigmafes"]        # [0.5, 0.5, 0.5]
+sigmanr = elas[sectors, "sigmanr"]          # [0.3, 0.3, 0.3]
+eta = elas[sectors, "eta"]                  # [0.5, 2.0, 1.0]
 
 # 4. Generate CGE Model
 function solve_cge()  
@@ -222,6 +222,6 @@ solve_cge()
 #####################################################
 # Experiments
 
-#ls = sum(l0) * 6
-#ks = sum(k0) * 10
-#solve_cge()
+ls = sum(l0) * 1
+ks = sum(k0) * 1.5
+solve_cge()

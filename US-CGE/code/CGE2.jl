@@ -113,6 +113,6 @@ end
 solve_cge()
 
 # second experiment by adjusting the supply of labor and capital
-ls = sum(l0) * 2
-ks = sum(k0) * 0.8
+ls = sum(l0) * 1
+ks = sum(k0) * 1.5
 solve_cge()
