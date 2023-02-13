@@ -118,5 +118,5 @@ end
 solve_cge()
 
 ls = sum(l0) * 1
-ks = sum(k0) * 2
+ks = sum(k0) * 1.5
 solve_cge()

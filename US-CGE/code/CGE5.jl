@@ -161,6 +161,9 @@ function solve_cge()
     # @show result_value.(pgdp)
     # @show result_value.(gdp)
     # println("Walras is:")
+    @show result_value.(yh)
+    @show result_value.(yd)
+    @show result_value.(yg)
     @show result_value.(walras)
     # @show result_value.(wk)
 end
@@ -168,6 +171,6 @@ end
 solve_cge()
 
 
-#ls = sum(l0) * 2
-#ks = sum(k0) * 3
-#solve_cge()
+ls = sum(l0) * 1
+ks = sum(k0) * 1.5
+solve_cge()
