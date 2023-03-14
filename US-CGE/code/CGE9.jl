@@ -24,7 +24,7 @@ va = ["L","K","T"]
 NumSector = length(sectors)
 NumHouseholds = length(households)
 
-samdir = joinpath(@__DIR__, "..", "data", "SAM42HH2I.csv")
+samdir = joinpath(@__DIR__, "data", "SAM42HH2I.csv")
 sam = CSV.read(samdir, DataFrames.DataFrame, header=1)
 sam = Matrix(sam)[1:49, 2:50] # SAM table
 

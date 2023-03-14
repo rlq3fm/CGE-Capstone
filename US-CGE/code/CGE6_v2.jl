@@ -20,7 +20,8 @@ sam = Array(CSV.read(samdir, DataFrames.DataFrame, header=1))
 #
 # Bill's translation of China variables to a more understandable (for him) variable set
 #   see Textbook of Computable General Equilibrium Modeling
-#
+
+# 1.0 calibrate model
 X0 = sam[sectors, sectors]               # goods production i/o matrix
 F0 = sam[cap_lab_indx, sectors]          # factor payments in sam
 Y0 = sum(F0,dims=1)                      # sum of factor payments by sector
@@ -32,8 +33,8 @@ FF0 = sum(sam[7,cap_lab_indx])           # total HH factor income in sam
 Q0 = Xp0 + Xg0 + sum(X0,dims=2)          # Total production by sector 
 alpha = Xp0 ./ sum(Xp0)                  # share of HH expenditures on each good as a fraction of total expenditures 
 beta = F0 ./ Y0                          # factor payment as share of total factor payments by sector
-ay = Y0 ./ Z0                            # composite factor input requirement coefficient
-ax = X0 ./ (sum(X0, dims=1))             # intermediate input requirement coefficient
+ay = Y0 ./ Z0                            # composite factor input requirement coefficient ##fixed constant
+ax = X0 ./ (sum(X0, dims=1))             # intermediate input requirement coefficient ##fixed constant
 #b = Y0 ./ prod(F0.**beta,dims=1)
 
 # Now back to the original cge variables
@@ -107,7 +108,7 @@ function solve_cge()
 
     # int + kl = prod
     # intermediate inputs are constant shares of total production
-    @mapping(m, eq_int[i in sectors], int[i]  - aint[i] * prod[i])
+    @mapping(m, eq_int[i in sectors], int[i]  - aint[i] * prod[i]) #int[i] = aint[i]*prod[i] supply =demand
     @complementarity(m, eq_int, int)
 
     # composite capital labor bundle is a constant share of total production
@@ -184,6 +185,8 @@ function solve_cge()
     # Model Solver
     status = solveMCP(m; convergence_tolerance=1e-8, output="yes", time_limit=600)
     @show result_value.(pk)
+    @show result_value.(prod)
+    @show result_value.(consh)
     @show result_value.(walras)
 end
 

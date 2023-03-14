@@ -33,7 +33,7 @@ va = ["L","K","T"]
 NumSector = length(sectors)
 NumHouseholds = length(households)
 
-samdir = joinpath(@__DIR__, "data", "SAM2017.csv")
+samdir = joinpath(@__DIR__, "data", "dummySAM.csv")
 sam = CSV.read(samdir, DataFrames.DataFrame, header=1)
 sam = Matrix(sam)[1:50, 2:51] # SAM table
 
@@ -504,5 +504,5 @@ function generate_CGE()
 end
 result = generate_CGE()
 
-resdir = joinpath(@__DIR__, "..", "result", "Result.csv")
+resdir = joinpath(@__DIR__, "..", "result", "Result-test.csv")
 CSV.write(resdir, result)
