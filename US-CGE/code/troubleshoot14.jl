@@ -2,26 +2,26 @@
 using JuMP, Complementarity, DataFrames, CSV
 PATHSolver.c_api_License_SetString("2830898829&Courtesy&&&USR&45321&5_1_2021&1000&PATH&GEN&31_12_2025&0_0_0&6000&0_0")
 
-samList = ["AgFFF", "Coal", "OilGas", "MetMin", "NMetMin", "FoodPr", "Textile", "Apparel",
+samList = ["AgFFF", "Coal", "OilGas", "OXT", "Leather", "FoodPr", "Textile", "Apparel",
             "WoodPr", "PaperPr", "RefPet", "Chemical", "NMetPr", "Metals", "MetalPr",
-            "GenEqp", "SpecEqp", "TransEqp", "ElecEqp", "ICTEqp", "PrecInst", "OthMfg",
-            "Waste", "MachRep", "ElecDist","GasDist", "WatDist", "Constr", "WhRetTr", "TranspSrv",
-            "HotRest", "ICTServ", "Finance", "RealEst", "BusServe", "ResTech", "EnvServ",
-            "ResServ", "Education", "Health", "RecEnt", "PubAdm", 
+            "GenEqp", "warehouse", "TransEqp", "ElecEqp", "ICTEqp", "Insurance", "OthMfg",
+            "OTP", "MachRep", "ElecDist","GasDist", "WatDist", "Constr", "WhRetTr", "TranspSrv",
+            "HotRest", "ICTServ", "Finance", "RealEst", "BusServe", "MVParts", "Pharm",
+            "RubPlas", "Education", "Health", "RecEnt", "PubAdm", 
             "L", "K", "T", "RuralHH", "UrbanHH", "S", "E"]
 
-sector = ["AgFFF", "Coal", "OilGas", "MetMin", "NMetMin", "FoodPr", "Textile", "Apparel",
+sector = ["AgFFF", "Coal", "OilGas", "OXT", "Leather", "FoodPr", "Textile", "Apparel",
             "WoodPr", "PaperPr", "RefPet", "Chemical", "NMetPr", "Metals", "MetalPr",
-            "GenEqp", "SpecEqp", "TransEqp", "ElecEqp", "ICTEqp", "PrecInst", "OthMfg",
-            "Waste", "MachRep", "ElecDist","GasDist", "WatDist", "Constr", "WhRetTr", "TranspSrv",
-            "HotRest", "ICTServ", "Finance", "RealEst", "BusServe", "ResTech", "EnvServ",
-            "ResServ", "Education", "Health", "RecEnt", "PubAdm"]
+            "GenEqp", "warehouse", "TransEqp", "ElecEqp", "ICTEqp", "Insurance", "OthMfg",
+            "OTP", "MachRep", "ElecDist","GasDist", "WatDist", "Constr", "WhRetTr", "TranspSrv",
+            "HotRest", "ICTServ", "Finance", "RealEst", "BusServe", "MVParts", "Pharm",
+            "RubPlas", "Education", "Health", "RecEnt", "PubAdm"]
 
 sectors = collect(1:1:length(sector))
 scnList = ["BAU", "CN"]
 years = collect(2017:1:2060)
 scnL = collect(1:1:length(scnList))
-energy = ["Coal", "RefPet", "ElecDist", "GasDist"]
+energy = ["Coal", "RefPet", "Elec", "GasDist"]
 ens = [2, 11, 25, 26] # energy sectors or sectors
 fens = [2, 11, 26] # fossil fuel sectors or sectors
 non_ens = setdiff(sectors, ens) # non-energy sectors
@@ -117,7 +117,7 @@ ext0 = sam[sectors, NumSector + 3 + NumHouseholds + 3] # export to ROC
 adms = dmd0 ./ prod0
 aext = ext0 ./ prod0
 
-elasdir = joinpath(@__DIR__, "..", "data", "Elasticities.csv")
+elasdir = joinpath(@__DIR__, "data", "Elasticities.csv")
 elas = CSV.read(elasdir, DataFrames.DataFrame, header=1)
 
 # 2.2 Elasticities
@@ -135,7 +135,7 @@ sigmanr = elas[sectors, "sigmanr"]
 eta = elas[sectors, "eta"]
 
 # 2.3 Emissions
-emisdir = joinpath(@__DIR__, "..", "data", "Emissions2017.csv") # emission factors
+emisdir = joinpath(@__DIR__, "data", "Emissions2017.csv") # emission factors
 emission_factor =  CSV.read(emisdir, DataFrames.DataFrame, header=1)
 emission_factor = Matrix(emission_factor)[1:44, 2:43] # emission_fac table
 
@@ -157,16 +157,16 @@ rgdp0 = sum(sum(consh0[i, h] for h in households) for i in sectors) + sum(consg0
 rgdp_ps0 = sum(prodtr .* prod0 .+ l0 .+ k0)
 rgdp_cs0 = sum(sum(consh0[i, h] for h in households) for i in sectors) + sum(consg0[i] + inv0[i] + ext0[i] - imt0[i] for i in sectors) 
 
-popdir = joinpath(@__DIR__, "..", "data", "Population_trend.csv")
+popdir = joinpath(@__DIR__, "data", "Population_trend.csv")
 pop =  CSV.read(popdir, DataFrames.DataFrame, header=1)
 pop_trend = Matrix(pop)[1:44, 2:3] ./100 
 NumYears = 44
 
-gdpdir = joinpath(@__DIR__, "..", "data", "GDP_grov.csv")
+gdpdir = joinpath(@__DIR__, "data", "GDP_grov.csv")
 gdp =  CSV.read(gdpdir, DataFrames.DataFrame, header=1)
 gdp_trend = Matrix(gdp)[1:44, 3] ./100
 
-emitdir = joinpath(@__DIR__, "..", "data", "Emit_trend.csv")
+emitdir = joinpath(@__DIR__, "data", "Emit_trend.csv")
 emit =  CSV.read(emitdir, DataFrames.DataFrame, header=1)
 emit_trend = Matrix(emit)[1:44, 2]
 
