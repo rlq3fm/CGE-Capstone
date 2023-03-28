@@ -2,20 +2,22 @@
 using JuMP, Complementarity, DataFrames, CSV
 PATHSolver.c_api_License_SetString("2830898829&Courtesy&&&USR&45321&5_1_2021&1000&PATH&GEN&31_12_2025&0_0_0&6000&0_0")
 
-samList = ["AgFFF", "Coal", "OilGas", "OXT", "Leather", "FoodPr", "Textile", "Apparel",
+samList = ["AgFFF", "Coal", "OilGas", "OXT", "FoodPr", "Textile", "Apparel", "LEA",
             "WoodPr", "PaperPr", "RefPet", "Chemical", "NMetPr", "Metals", "MetalPr",
-            "GenEqp", "warehouse", "TransEqp", "ElecEqp", "ICTEqp", "Insurance", "OthMfg",
-            "OTP", "MachRep", "ElecDist","GasDist", "WatDist", "Constr", "WhRetTr", "TranspSrv",
-            "HotRest", "ICTServ", "Finance", "RealEst", "BusServe", "MVParts", "Pharm",
-            "RubPlas", "Education", "Health", "RecEnt", "PubAdm", 
-            "L", "K", "T", "RuralHH", "UrbanHH", "S", "E"]
+            "GenEqp", "TransEqp", "ElecEqp", "ICTEqp", "OthMfg", "MVH", "BPH","RPP",
+            "Elec", "GasDist", "WatDist", "Constr", "WhRetTr", "TranspSrv", "OTP",
+            "HotRest", "ICTServ", "Finance", "INS", "RealEst and Dwellings", "BusServe",
+            "Education", "Health", "RecEnt", "PubAdm", "WHS",
+            "L", "K", "T", "RuralHH", "UrbanHH", "S", "ROW"
+            ]
 
-sector = ["AgFFF", "Coal", "OilGas", "OXT", "Leather", "FoodPr", "Textile", "Apparel",
+sector = ["AgFFF", "Coal", "OilGas", "OXT", "FoodPr", "Textile", "Apparel", "LEA",
             "WoodPr", "PaperPr", "RefPet", "Chemical", "NMetPr", "Metals", "MetalPr",
-            "GenEqp", "warehouse", "TransEqp", "ElecEqp", "ICTEqp", "Insurance", "OthMfg",
-            "OTP", "MachRep", "ElecDist","GasDist", "WatDist", "Constr", "WhRetTr", "TranspSrv",
-            "HotRest", "ICTServ", "Finance", "RealEst", "BusServe", "MVParts", "Pharm",
-            "RubPlas", "Education", "Health", "RecEnt", "PubAdm"]
+            "GenEqp", "TransEqp", "ElecEqp", "ICTEqp", "OthMfg", "MVH", "BPH","RPP",
+            "Elec", "GasDist", "WatDist", "Constr", "WhRetTr", "TranspSrv", "OTP",
+            "HotRest", "ICTServ", "Finance", "INS", "RealEst and Dwellings", "BusServe",
+            "Education", "Health", "RecEnt", "PubAdm", "WHS"
+            ]
 
 sectors = collect(1:1:length(sector))
 scnList = ["BAU", "CN"]
@@ -33,7 +35,7 @@ va = ["L","K","T"]
 NumSector = length(sectors)
 NumHouseholds = length(households)
 
-samdir = joinpath(@__DIR__, "data", "dummySAM.csv")
+samdir = joinpath(@__DIR__, "data", "US SAM_V1.csv")
 sam = CSV.read(samdir, DataFrames.DataFrame, header=1)
 sam = Matrix(sam)[1:50, 2:51] # SAM table
 
